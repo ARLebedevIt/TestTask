@@ -2,6 +2,13 @@ import React, { Dispatch, FC, SetStateAction, memo, useEffect } from 'react'
 import { PostType } from '../../../types/postsTS'
 import Post from '../Post/Post'
 import { postsAPI } from '../../../api/postsAPI'
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import CircularProgress from '@mui/material/CircularProgress';
+import { Container } from '@mui/material';
 
 type Props = {
   posts: PostType[] | null
@@ -28,9 +35,17 @@ const PostList: FC<Props> = memo(({ posts, setPosts, currUser }) => {
   }, [currUser])
   return (
     <>
-      {posts?.map(item => (
-        <Post key={item.id} post={item} />
-      ))}
+    <Container maxWidth={false}>
+      <List sx={{display: 'flex', gap: '20px', flexDirection: 'column'}}>
+        {posts?.map(item => (
+          <ListItem key={item.id} disablePadding>
+            <ListItemButton sx={{display: 'inline'}}>
+              <Post post={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+      </Container>
     </>
   )
 })

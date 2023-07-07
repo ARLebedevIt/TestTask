@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react'
 import { UsersType } from '../../../types/usersTS'
 import { usersAPI } from '../../../api/usersAPI'
 import { PostType } from '../../../types/postsTS'
+import { Box, Container, Typography } from '@mui/material'
 
 type Props = {
   postInfo: PostType | null
@@ -21,22 +22,22 @@ const User: FC<Props> = ({postInfo}) => {
     fetchUser()
   }, [postInfo])
   return (
-    <div className='user__content'>
-      <div className="user__items">
-        <div className="user__item">
-          <span>{`Идентификатор: ${userInfo?.id}`}</span>
-        </div>
-        <div className="user__item">
-          <span>{`Автор поста: ${userInfo?.name}`}</span>
-        </div>
-        <div className="user__item">
-          <span>{`Контакты: Mail: ${userInfo?.email}, Телефон: ${userInfo?.phone}`}</span>
-        </div>
-        <div className="user__item">
-          <span>{`Сайт: ${userInfo?.website}`}</span>
-        </div>
-      </div>
-    </div>
+    <Container disableGutters maxWidth={false}>
+      <Box sx={{ display: 'flex', gap: '15px', flexDirection: 'column', p: '10px', border: 'solid 2px grey', borderRadius: '5px'}}>
+        <Box>
+          <Typography>{`Автор поста: ${userInfo?.name}`}</Typography>
+        </Box>
+        <Box>
+          <Typography>{`Идентификатор: ${userInfo?.id}`}</Typography>
+        </Box>
+        <Box>
+          <Typography>{`Контакты: Mail: ${userInfo?.email}, Телефон: ${userInfo?.phone}`}</Typography>
+        </Box>
+        <Box>
+          <Typography>{`Сайт: ${userInfo?.website}`}</Typography>
+        </Box>
+      </Box>
+    </Container>
   )
 }
 

@@ -1,23 +1,25 @@
 import React, { FC } from 'react'
 import { PostType } from '../../../types/postsTS'
-import './Post.css'
 import { useNavigate } from 'react-router-dom'
+import { Box, Container, Typography } from '@mui/material'
 
 type Props = {
   post: PostType
 }
 
-const Post: FC<Props> = ({post}) => {
+const Post: FC<Props> = ({ post }) => {
   const navigate = useNavigate()
   return (
-    <div onClick={() => navigate(`/posts/${post.id}`, { replace: false })} className='post__content'>
-      <div className="post__items">
-        <div className="post__item">
-          <div className="post__title">{post.title}</div>
-          <div className="post__text">{post.body}</div>
-        </div>
-      </div>
-    </div>
+    <Container disableGutters maxWidth={false} onClick={() => navigate(`/posts/${post.id}`, { replace: false })}>
+      <Box sx={{display: 'flex', gap: '10px', flexDirection: 'column'}}>
+        <Box>
+          <Typography>{`Название: ${post.title}`}</Typography>
+        </Box>
+        <Box>
+          <Typography>{`Содержимое: ${post.body}`}</Typography>
+        </Box>
+      </Box>
+    </Container>
   )
 }
 

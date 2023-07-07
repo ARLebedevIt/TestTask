@@ -2,7 +2,7 @@ import { PostType } from "../types/postsTS"
 import { instanceAPI } from "./instanceAPI"
 
 export const postsAPI = {
-  getPosts(limit: number = 10) {
+  getPosts(limit: number = 20) {
     return instanceAPI.get<PostType[]>(`posts?_limit=${limit}`).then(res => res.data).catch(err => err)
   },
   getUserPosts(id: string) {

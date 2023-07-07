@@ -1,7 +1,0 @@
-
-.post__item{
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  border: 2px solid red;
-}

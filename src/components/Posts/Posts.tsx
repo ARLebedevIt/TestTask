@@ -1,24 +1,23 @@
 import React, { useState, FC, memo } from 'react'
 import { PostType } from '../../types/postsTS'
-import './Posts.css'
 import Users from '../Users/Users'
 import PostList from './PostList/PostList'
-import { useLocation } from 'react-router-dom'
+import { Box, Container } from '@mui/material'
 
 const Posts: FC = memo(() => {
   const [posts, setPosts] = useState<PostType[] | null>(null)
   const [currUser, setUser] = useState<string | null>(null) 
   return (
-    <div className='posts__content'>
-      <div className="posts__items">
-        <div className="post__item">
+    <Container disableGutters maxWidth={'xl'} sx={{mt: '20px', minHeight: '100vh'}}>
+      <Box>
+        <Box sx={{ display: 'flex', justifyContent: 'center'}}>
           <Users setUser={setUser} />
-        </div>
-        <div className="post__item">
+        </Box>
+        <Box>
           <PostList currUser={currUser} setPosts={setPosts} posts={posts} />
-        </div>
-      </div>
-    </div>
+        </Box>
+      </Box>
+    </Container>
   )
 })
 
