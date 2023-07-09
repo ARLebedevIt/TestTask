@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState, memo, Suspense } from 'react'
+import React, { FC, useEffect, useState, memo } from 'react'
 import { useParams } from 'react-router-dom'
 import { postsAPI } from '../../../api/postsAPI'
 import { PostType } from '../../../types/postsTS'
@@ -21,7 +21,7 @@ const PostInfo: FC = memo(() => {
     }
     fetchPost()
     setStatusComponent(true)
-  }, [])
+  }, [id])
   return (
     <>
       <Container maxWidth='xl' sx={{ display: 'flex', gap: '20px', flexDirection: 'column', py: '20px', minHeight: '100%' }}>

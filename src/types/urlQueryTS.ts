@@ -1,4 +1,5 @@
 export type QueryType = {
   page?: number
-  userId?: string
+  userId?: string,
+  limit?: string
 }

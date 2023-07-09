@@ -24,7 +24,7 @@ const PostList: FC<Props> = memo(({ posts, setPosts, currUser, setUser, currLimi
   let [currPage, setPage] = useState<number>(1)
   const [notFound, setNotFound] = useState<boolean>(false) // для Notification о том, что User не найден
   const location = useLocation()
-  const query: QueryType = { page: currPage }
+  const query: QueryType = { page: currPage, limit: currLimit }
   const [statusPosts, setPostsStatus] = useState<boolean>(false)  // для Notification о том, что загружены все посты по фильтру
   const { ref, inView } = useInView({
     threshold: 0,
