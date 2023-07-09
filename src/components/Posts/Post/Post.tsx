@@ -11,7 +11,7 @@ const Post: FC<Props> = ({ post }) => {
   const navigate = useNavigate()
   return (
     <Container disableGutters maxWidth={false} onClick={() => navigate(`/posts/${post.id}`, { replace: false })}>
-      <Box sx={{display: 'flex', gap: '10px', flexDirection: 'column'}}>
+      <Box sx={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
         <Box>
           <Typography>{`Название: ${post.title}`}</Typography>
         </Box>
