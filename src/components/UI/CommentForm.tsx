@@ -14,15 +14,28 @@ type Props = {
   createComment: ({ body, postId, id, name, email }: CommentsType) => Promise<void>
   comments: [] | CommentsType[],
 }
-
-const CommentForm: FC<Props> = ({ setNewComment, createComment, newComment, comments}) => {
+const CommentForm: FC<Props> = ({ setNewComment, createComment, newComment, comments }) => {
   const { palette: { mode } } = useTheme()
   const [commentAdded, statusComment] = useState<boolean>(false)  // для Notification о том, что комментарий отправлен
+  const handleSubmit = () => {
+    createComment({
+      body: newComment as string, postId: comments[0].postId, id: Number(new Date()),
+      name: 'Пользователь не авторизован', email: 'Неизвестно'
+    });
+    statusComment(true);
+    setNewComment('');
+  }
   return (
-    <Container sx={{ display: 'flex', gap: '20px', flexDirection: { xs: 'column',sm: 'row' }, alignItems: {xs: 'center', sm: 'unset'} }} 
-    disableGutters maxWidth={false}>
-      <TextField sx={{width: {xs: '100%', sm: '300px'}}} multiline onChange={(e) => setNewComment(e.target.value)} value={newComment} id="outlined-basic" 
-      label="Комментарий" variant="outlined" />
+    <Container sx={{ display: 'flex', gap: '20px', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'center', sm: 'unset' } }}
+      disableGutters maxWidth={false}>
+      <TextField sx={{ width: { xs: '100%', sm: '300px' } }} multiline onChange={(e) => setNewComment(e.target.value)} value={newComment} id="outlined-basic"
+        label="Комментарий" variant="outlined"
+        onKeyDown={(e) => {
+          if (e.code == 'Enter' && newComment !== '') {
+            e.preventDefault()
+            handleSubmit()
+          }
+        }} />
       <Button sx={{
         '&:hover': {
           backgroundColor: `${mode == 'dark' && '#90CAF9'}`,
@@ -30,12 +43,7 @@ const CommentForm: FC<Props> = ({ setNewComment, createComment, newComment, comm
         },
         bgcolor: `${mode == 'dark' && 'white'}`
       }}
-        variant="contained" disabled={`${newComment}`.length < 1} onClick={() => {
-          createComment({
-            body: newComment as string, postId: comments[0].postId, id: Number(new Date()),
-            name: 'Пользователь не авторизован', email: 'Неизвестно'
-          }); statusComment(true); setNewComment('');
-        }}>Отправить</Button>
+        variant="contained" disabled={`${newComment}`.length < 1} onClick={() => handleSubmit()}>Отправить</Button>
       <Snackbar TransitionComponent={Slide} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} open={commentAdded}
         onClose={() => statusComment(false)}
         autoHideDuration={5000}>
