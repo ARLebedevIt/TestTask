@@ -24,7 +24,7 @@ const PostList: FC<Props> = memo(({ posts, setPosts, currUser, setUser, currLimi
   let [currPage, setPage] = useState<number>(1)
   const [notFound, setNotFound] = useState<boolean>(false) // для Notification о том, что User не найден
   const location = useLocation()
-  const query: QueryType = { page: currPage, limit: currLimit }
+  let query: QueryType = { page: currPage, limit: currLimit }
   const [statusPosts, setPostsStatus] = useState<boolean>(false)  // для Notification о том, что загружены все посты по фильтру
   const { ref, inView } = useInView({
     threshold: 0,
@@ -38,22 +38,22 @@ const PostList: FC<Props> = memo(({ posts, setPosts, currUser, setUser, currLimi
   // Запрос всех постов / постов конкретного пользователя
   useEffect(() => {
     const fetchUserPosts = async () => {
+      setPage(1)
+      let actualPage = 1  
+      let actualQuery = query      
       if (currUser == null) {
-        let result = await postsAPI.getPosts(currLimit, `${currPage}`)
-        setPosts(result)
-        delete query.userId
+        actualQuery = {...actualQuery, page: actualPage}
+        let result = await postsAPI.getPosts(currLimit, `${actualPage}`)
+        setPosts(result)        
         //@ts-ignore
-        setSearchParams(new URLSearchParams(query))
+        setSearchParams(new URLSearchParams(actualQuery))
       }
       if (currUser != null) {
-        setPage(1)
-        let actualPage = currPage
-        query.page = actualPage
-        query.userId = currUser
-        const result = await postsAPI.getUserPosts(currUser!, currLimit, +currPage > 1 ? '0' : `${currPage}`)
+        actualQuery = {...actualQuery, page: actualPage, userId: currUser}
+        const result = await postsAPI.getUserPosts(currUser!, currLimit, `${actualPage}`)
         setPosts(result)
         //@ts-ignore
-        setSearchParams(new URLSearchParams(query))
+        setSearchParams(new URLSearchParams(actualQuery))
       }
     }
     fetchUserPosts()
@@ -74,16 +74,19 @@ const PostList: FC<Props> = memo(({ posts, setPosts, currUser, setUser, currLimi
     const fetchMorePosts = async () => {
       if (inView) {
         setPage(++currPage)
+        let actualQuery = query
         let actualPage = currPage
-        query.page = actualPage
+        actualQuery = {...query, page: actualPage}
         let result: PostType[]
         if (currUser) {
-          result = await postsAPI.getUserPosts(currUser!, currLimit, `${currPage}`); query.userId = currUser;
-        } else result = await postsAPI.getPosts(currLimit, `${currPage}`);
+          result = await postsAPI.getUserPosts(currUser!, currLimit, `${actualPage}`);
+          actualQuery = {...query, userId: currUser};
+        } else result = await postsAPI.getPosts(currLimit, `${actualPage}`);
         setPosts(prev => [...prev!, ...result])
-        result.length < 1 && setPostsStatus(true)
-        //@ts-ignore
-        setSearchParams(new URLSearchParams(query))
+        if (result.length < 1) {
+          setPostsStatus(true)
+           //@ts-ignore
+        } else setSearchParams(new URLSearchParams(actualQuery))
       }
     }
     fetchMorePosts()
